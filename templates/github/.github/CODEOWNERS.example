@@ -1,0 +1,8 @@
+# Ganti nama file ini menjadi CODEOWNERS setelah placeholder organization diperbarui.
+
+# Reviewer default untuk seluruh perubahan repository.
+* @[ORGANIZATION]/dx-core
+
+# Pola opsional jika Team maintainer khusus project sudah tersedia:
+# * @[ORGANIZATION]/project-[system]-maintainers
+# /.github/ @[ORGANIZATION]/dx-core
