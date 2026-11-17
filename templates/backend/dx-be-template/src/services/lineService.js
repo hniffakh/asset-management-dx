@@ -1,13 +1,5 @@
 
-import {
-  findAllLines,
-  findLineByCode,
-  findLineByName,
-  insertLine,
-  updateLine,
-  deleteLine,
-} from "../models/lineModel.js";
-
+import { findAllLines, findLineByCode, findLineByName, insertLine, updateLine, deleteLine} from "../models/lineModel.js";
 import { ValidationError } from "../errors/ValidationError.js";
 import { NotFoundError } from "../errors/NotFoundError.js";
 import { AppError } from "../errors/AppError.js";
@@ -86,18 +78,12 @@ const validateUsername = (username) => {
   return validateText(username, "Username", 10);
 };
 
-// ============================================
 // GET ALL LINES
-// ============================================
-
 export const getAllLinesService = async () => {
   return await findAllLines();
 };
 
-// ============================================
 // GET LINE BY CODE
-// ============================================
-
 export const getLineByCodeService = async (lineCode) => {
   const code = validateLineCode(lineCode);
 
@@ -110,10 +96,7 @@ export const getLineByCodeService = async (lineCode) => {
   return line;
 };
 
-// ============================================
 // CREATE LINE
-// ============================================
-
 export const createLineService = async ({
   lineCode,
   companyCode,
@@ -178,10 +161,7 @@ export const createLineService = async ({
   return line;
 };
 
-// ============================================
 // UPDATE LINE
-// ============================================
-
 export const updateLineService = async ({
   oldLineCode,
   newLineCode,
@@ -266,10 +246,7 @@ export const updateLineService = async ({
   return await findLineByCode(newCode);
 };
 
-// ============================================
-// DELETE LINE (HARD DELETE)
-// ============================================
-
+// DELETE LINE 
 export const deleteLineService = async ({
   lineCode,
 }) => {

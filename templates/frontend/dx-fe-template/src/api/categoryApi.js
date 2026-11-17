@@ -1,4 +1,3 @@
-
 import apiClient from "./apiClient.js";
 
 // GET ALL CATEGORIES
@@ -25,7 +24,7 @@ export const updateCategory = async (id, data) => {
   return response.data;
 };
 
-// DELETE CATEGORY (SOFT DELETE)
+// DELETE CATEGORY
 export const deleteCategory = async (id) => {
   const response = await apiClient.delete(`/api/categories/${id}`);
   return response.data;

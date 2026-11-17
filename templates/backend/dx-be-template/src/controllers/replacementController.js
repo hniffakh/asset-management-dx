@@ -1,12 +1,4 @@
-import {
-  getReplacementOptionsService,
-  getReplacementsService,
-  getAssetHistoryService,
-  createReplacementService,
-  approveReplacementService,
-  rejectReplacementService,
-  cancelReplacementService,
-} from "../services/replacementService.js";
+import { getReplacementOptionsService, getReplacementsService, getAssetHistoryService, createReplacementService, approveReplacementService, rejectReplacementService, cancelReplacementService} from "../services/replacementService.js";
 import { ValidationError } from "../errors/ValidationError.js";
 import { HTTP_STATUS } from "../constants/httpStatusCodes.js";
 

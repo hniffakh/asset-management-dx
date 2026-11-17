@@ -2,19 +2,8 @@ import { Router } from "express";
 import { authenticate } from "../middleware/authenticate.js";
 import { authorizeRoles } from "../middleware/authorize.js";
 import { validate } from "../middleware/validate.js";
-import {
-  createReplacementSchema,
-  approveReplacementSchema,
-  rejectReplacementSchema,
-} from "../validations/replacementValidation.js";
-import {
-  getReplacementOptions,
-  getReplacements,
-  createReplacement,
-  approveReplacement,
-  rejectReplacement,
-  cancelReplacement,
-} from "../controllers/replacementController.js";
+import { createReplacementSchema, approveReplacementSchema, rejectReplacementSchema} from "../validations/replacementValidation.js";
+import { getReplacementOptions, getReplacements, createReplacement, approveReplacement, rejectReplacement, cancelReplacement} from "../controllers/replacementController.js";
 
 const router = Router();
 

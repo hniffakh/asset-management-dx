@@ -1,16 +1,7 @@
-import {
-  getAllSpecsService,
-  getSpecByIdService,
-  createSpecService,
-  updateSpecService,
-  deleteSpecService,
-} from "../services/specService.js";
-
+import { getAllSpecsService, getSpecByIdService, createSpecService, updateSpecService, deleteSpecService} from "../services/specService.js";
 import { HTTP_STATUS } from "../constants/httpStatusCodes.js";
 
-// ============================================
 // GET ALL SPECS
-// ============================================
 export const getAllSpecs = async (req, res, next) => {
   try {
     const result = await getAllSpecsService();
@@ -25,9 +16,7 @@ export const getAllSpecs = async (req, res, next) => {
   }
 };
 
-// ============================================
 // GET SPEC BY ID
-// ============================================
 export const getSpecById = async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -44,9 +33,7 @@ export const getSpecById = async (req, res, next) => {
   }
 };
 
-// ============================================
 // CREATE SPEC
-// ============================================
 export const createSpec = async (req, res, next) => {
   try {
     const {
@@ -74,9 +61,7 @@ export const createSpec = async (req, res, next) => {
   }
 };
 
-// ============================================
 // UPDATE SPEC
-// ============================================
 export const updateSpec = async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -107,9 +92,7 @@ export const updateSpec = async (req, res, next) => {
   }
 };
 
-// ============================================
 // DELETE SPEC (SOFT DELETE)
-// ============================================
 export const deleteSpec = async (req, res, next) => {
   try {
     const { id } = req.params;

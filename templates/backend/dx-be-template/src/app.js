@@ -42,8 +42,7 @@ app.get("/", (_req, res) => {
 // Feature Routes
 app.use("/api/auth", authRoutes);
 
-// Master Data: semua user login boleh melihat (GET),
-// tambah / ubah / hapus hanya admin
+// Master
 app.use("/api/categories", authenticate, adminForWrites, categoryRoutes);
 app.use("/api/lines", authenticate, adminForWrites, lineRoutes);
 app.use("/api/suppliers", authenticate, adminForWrites, supplierRoutes);
@@ -51,7 +50,7 @@ app.use("/api/specs", authenticate, adminForWrites, specRoutes);
 app.use("/api/devices", authenticate, adminForWrites, deviceRoutes);
 app.use("/api/opoq", authenticate, adminForWrites, opoqRoutes);
 
-// Peminjaman Aset (pembagian role diatur di dalam route masing-masing)
+// Peminjaman Aset 
 app.use("/api/replacement-requests", replacementRoutes);
 app.use("/api/asset-history", assetHistoryRoutes);
 

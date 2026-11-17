@@ -1,12 +1,4 @@
-
-import {
-  getAllLinesService,
-  getLineByCodeService,
-  createLineService,
-  updateLineService,
-  deleteLineService,
-} from "../services/lineService.js";
-
+import { getAllLinesService, getLineByCodeService, createLineService, updateLineService, deleteLineService} from "../services/lineService.js";
 import { HTTP_STATUS } from "../constants/httpStatusCodes.js";
 
 // GET ALL LINES

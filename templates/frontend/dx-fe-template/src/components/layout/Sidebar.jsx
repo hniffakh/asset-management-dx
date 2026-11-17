@@ -422,61 +422,6 @@ export default function Sidebar() {
           marginTop: "20px",
         }}
       >
-                <button
-          onClick={() => {
-            if (isCollapsed) {
-              setIsCollapsed(false);
-              setIsSettingsOpen(true);
-              return;
-            }
-            setIsSettingsOpen((prev) => !prev);
-          }}
-          title="Settings"
-          style={menuButtonStyle(false)}
-        >
-          <Settings size={iconSize} />
-
-          {!isCollapsed && (
-            <>
-              <span style={{ flex: 1 }}>Settings</span>
-
-              <ChevronDown
-                size={16}
-                style={{
-                  transform: isSettingsOpen
-                    ? "rotate(180deg)"
-                    : "rotate(0deg)",
-                  transition: "transform 0.2s ease",
-                }}
-              />
-            </>
-          )}
-        </button>
-
-        {!isCollapsed && isSettingsOpen && (
-          <div
-            style={{
-              marginLeft: "15px",
-              paddingLeft: "12px",
-              borderLeft: "1px solid #334155",
-              display: "flex",
-              flexDirection: "column",
-              gap: "4px",
-              marginTop: "5px",
-            }}
-          >
-            
-
-            <button
-              onClick={handleLogout}
-              title="Logout"
-              style={{ ...submenuButtonStyle(false), color: "#f87171" }}
-            >
-              <LogOut size={15} />
-              <span>Logout</span>
-            </button>
-          </div>
-        )}
 
         {!isCollapsed && (
           <div

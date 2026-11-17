@@ -1,5 +1,4 @@
-import { getPool } from "../config/db.js";
-import sql from "../config/db.js";
+import sql, { getPool } from "../config/db.js";
 
 // GET ALL SUPPLIER
 export const findAllSupplier = async () => {

@@ -28,6 +28,4 @@ router.put(
   updateCategory
 );
 
-
-
 export default router;

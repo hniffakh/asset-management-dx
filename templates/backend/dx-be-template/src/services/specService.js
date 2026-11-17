@@ -1,20 +1,10 @@
 
-import {
-  findAllSpecs,
-  findSpecById,
-  findSpecByName,
-  insertSpec,
-  updateSpec,
-  deactivateSpec,
-} from "../models/specModel.js";
-
+import { findAllSpecs, findSpecById, findSpecByName, insertSpec, updateSpec, deactivateSpec} from "../models/specModel.js";
 import { ValidationError } from "../errors/ValidationError.js";
 import { NotFoundError } from "../errors/NotFoundError.js";
 import { AppError } from "../errors/AppError.js";
 
-// ============================================
 // VALIDATE SPEC ID
-// ============================================
 const validateSpecId = (specId) => {
   const id = Number(specId);
 
@@ -27,9 +17,7 @@ const validateSpecId = (specId) => {
   return id;
 };
 
-// ============================================
 // VALIDATE SPEC NAME
-// ============================================
 const validateSpecName = (specName) => {
   if (
     typeof specName !== "string" ||
@@ -43,14 +31,11 @@ const validateSpecName = (specName) => {
   return specName.trim();
 };
 
-// ============================================
 // VALIDATE LIFETIME
-// ============================================
 const validateLifetime = (
   lifetimeStart,
   lifetimeEnd
 ) => {
-  // Validate date format and calendar date
   const validateDate = (value, fieldName) => {
     if (
       typeof value !== "string" ||
@@ -107,9 +92,7 @@ const validateLifetime = (
   };
 };
 
-// ============================================
 // VALIDATE ACTIVE FLAG
-// ============================================
 const validateActiveFlag = (activeFlag) => {
   if (
     activeFlag !== 0 &&
@@ -123,16 +106,12 @@ const validateActiveFlag = (activeFlag) => {
   return activeFlag;
 };
 
-// ============================================
 // GET ALL SPECS
-// ============================================
 export const getAllSpecsService = async () => {
   return await findAllSpecs();
 };
 
-// ============================================
 // GET SPEC BY ID
-// ============================================
 export const getSpecByIdService = async (specId) => {
   const id = validateSpecId(specId);
 
@@ -147,9 +126,7 @@ export const getSpecByIdService = async (specId) => {
   return spec;
 };
 
-// ============================================
 // CREATE SPEC
-// ============================================
 export const createSpecService = async ({
   specName,
   lifetimeStart,
@@ -195,9 +172,7 @@ export const createSpecService = async ({
   return spec;
 };
 
-// ============================================
 // UPDATE SPEC
-// ============================================
 export const updateSpecService = async ({
   specId,
   specName,
@@ -265,9 +240,7 @@ export const updateSpecService = async ({
   return await findSpecById(id);
 };
 
-// ============================================
-// DELETE SPEC (SOFT DELETE)
-// ============================================
+// DELETE SPEC
 export const deleteSpecService = async ({
   specId,
   username,

@@ -24,7 +24,7 @@ export const updateSpec = async (id, data) => {
   return response.data;
 };
 
-// DELETE SPEC (SOFT DELETE)
+// DELETE SPEC
 export const deleteSpec = async (id) => {
   const response = await apiClient.delete(`/api/specs/${id}`);
   return response.data;

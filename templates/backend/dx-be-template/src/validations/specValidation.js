@@ -1,8 +1,6 @@
 import { z } from "zod";
 
-// ============================================
 // SPEC NAME VALIDATION
-// ============================================
 const specNameSchema = z
   .string({
     required_error: "Nama spesifikasi wajib diisi",
@@ -11,9 +9,7 @@ const specNameSchema = z
   .trim()
   .min(1, "Nama spesifikasi wajib diisi");
 
-// ============================================
 // LIFETIME START VALIDATION
-// ============================================
 const lifetimeStartSchema = z
   .string({
     required_error: "Lifetime start wajib diisi",
@@ -22,9 +18,7 @@ const lifetimeStartSchema = z
   .min(1, "Lifetime start wajib diisi")
   .date("Format lifetime start tidak valid");
 
-// ============================================
 // LIFETIME END VALIDATION
-// ============================================
 const lifetimeEndSchema = z
   .string({
     required_error: "Lifetime end wajib diisi",
@@ -33,9 +27,7 @@ const lifetimeEndSchema = z
   .min(1, "Lifetime end wajib diisi")
   .date("Format lifetime end tidak valid");
 
-// ============================================
 // ACTIVE FLAG VALIDATION
-// ============================================
 const activeFlagSchema = z.union([
   z.literal(0),
   z.literal(1),
@@ -45,9 +37,7 @@ const activeFlagSchema = z.union([
   }),
 });
 
-// ============================================
 // LIFETIME RANGE VALIDATION
-// ============================================
 const validateLifetimeRange = (data, ctx) => {
   if (
     data.lifetime_start &&
@@ -62,9 +52,7 @@ const validateLifetimeRange = (data, ctx) => {
   }
 };
 
-// ============================================
 // CREATE SPEC
-// ============================================
 export const createSpecSchema = z
   .object({
     spec_name: specNameSchema,
@@ -75,9 +63,7 @@ export const createSpecSchema = z
   .strict()
   .superRefine(validateLifetimeRange);
 
-// ============================================
 // UPDATE SPEC
-// ============================================
 export const updateSpecSchema = z
   .object({
     spec_name: specNameSchema,

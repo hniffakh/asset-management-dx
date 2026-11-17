@@ -1,11 +1,4 @@
-import {
-    getAllSuppliersService,
-    getSupplierByIdService,
-    createSupplierService,
-    updateSupplierService,
-    deleteSupplierService,
-} from "../services/supplierService.js";
-
+import { getAllSuppliersService, getSupplierByIdService, createSupplierService, updateSupplierService, deleteSupplierService} from "../services/supplierService.js";
 import { HTTP_STATUS } from "../constants/httpStatusCodes.js";
 
 // GET ALL SUPPLIERS

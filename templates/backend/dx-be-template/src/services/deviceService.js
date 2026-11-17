@@ -1,7 +1,4 @@
-import {
-  findAllDevices, findDeviceById, findDeviceByName, insertDevice,
-  updateDevice, countAssetsByDevice, deactivateDevice, insertAssets,
-} from "../models/deviceModel.js";
+import { findAllDevices, findDeviceById, findDeviceByName, insertDevice, updateDevice, countAssetsByDevice, deactivateDevice, insertAssets} from "../models/deviceModel.js";
 import { ValidationError } from "../errors/ValidationError.js";
 import { NotFoundError } from "../errors/NotFoundError.js";
 import { AppError } from "../errors/AppError.js";
@@ -79,8 +76,6 @@ export const deleteDeviceService = async ({ deviceId, username }) => {
   if (Number(device.active_flag) === 0) {
     throw new AppError("Device sudah berstatus Inactive", 409);
   }
-
-  // REVISI: blok pengecekan aset (countAssetsByDevice) dihapus
 
   const deleted = await deactivateDevice({ deviceId: id, username });
   if (!deleted) throw new AppError("Device gagal dinonaktifkan", 409);

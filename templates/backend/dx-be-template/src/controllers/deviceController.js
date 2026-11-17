@@ -1,7 +1,4 @@
-import {
-  getAllDevicesService, getDeviceByIdService, createDeviceService,
-  updateDeviceService, deleteDeviceService, addStockService,
-} from "../services/deviceService.js";
+import { getAllDevicesService, getDeviceByIdService, createDeviceService, updateDeviceService, deleteDeviceService, addStockService} from "../services/deviceService.js";
 import { HTTP_STATUS } from "../constants/httpStatusCodes.js";
 
 export const getAllDevices = async (req, res, next) => {

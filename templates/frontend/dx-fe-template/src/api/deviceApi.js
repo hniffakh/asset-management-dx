@@ -1,7 +1,5 @@
 import axios from "axios";
 
-// SESUAIKAN: kalau di proyek sudah ada instance axios (misalnya ./axiosInstance
-// atau ./api.js), import itu saja dan hapus bagian create di bawah.
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL || "http://localhost:3000/api",
 });

@@ -1,5 +1,4 @@
-import { getPool } from "../config/db.js";
-import sql from "../config/db.js";
+import sql, { getPool } from "../config/db.js";
 
 export const findUserByUsername = async (username) => {
   const pool = await getPool();

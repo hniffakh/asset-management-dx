@@ -1,15 +1,7 @@
-import {
-  getAllCategoriesService,
-  getCategoryByIdService,
-  createCategoryService,
-  updateCategoryService,
-} from "../services/categoryService.js";
-
+import { getAllCategoriesService, getCategoryByIdService, createCategoryService, updateCategoryService} from "../services/categoryService.js";
 import { HTTP_STATUS } from "../constants/httpStatusCodes.js";
 
-// ============================================
 // GET ALL CATEGORIES
-// ============================================
 export const getAllCategories = async (req, res, next) => {
   try {
     const result = await getAllCategoriesService();
@@ -24,9 +16,7 @@ export const getAllCategories = async (req, res, next) => {
   }
 };
 
-// ============================================
 // GET CATEGORY BY ID
-// ============================================
 export const getCategoryById = async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -43,9 +33,7 @@ export const getCategoryById = async (req, res, next) => {
   }
 };
 
-// ============================================
 // CREATE CATEGORY
-// ============================================
 export const createCategory = async (req, res, next) => {
   try {
     const { category_name, active_flag = 1 } = req.validated;
@@ -66,9 +54,7 @@ export const createCategory = async (req, res, next) => {
   }
 };
 
-// ============================================
 // UPDATE CATEGORY
-// ============================================
 export const updateCategory = async (req, res, next) => {
   try {
     const { id } = req.params;

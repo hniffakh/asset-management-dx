@@ -24,7 +24,7 @@ const rollback = async (tx) => {
   try {
     await tx.rollback();
   } catch {
-    /* transaksi sudah dibatalkan */
+    
   }
 };
 

@@ -1,10 +1,7 @@
 
 import { z } from "zod";
 
-// ============================================
 // LINE CODE VALIDATION
-// ============================================
-
 const lineCodeSchema = z
   .string({
     required_error: "Line code wajib diisi",
@@ -14,10 +11,7 @@ const lineCodeSchema = z
   .min(1, "Line code wajib diisi")
   .max(10, "Line code maksimal 10 karakter");
 
-// ============================================
 // COMPANY CODE VALIDATION
-// ============================================
-
 const companyCodeSchema = z
   .string({
     required_error: "Company code wajib diisi",
@@ -27,10 +21,7 @@ const companyCodeSchema = z
   .min(1, "Company code wajib diisi")
   .max(11, "Company code maksimal 11 karakter");
 
-// ============================================
 // PLANT CODE VALIDATION
-// ============================================
-
 const plantCodeSchema = z
   .string({
     required_error: "Plant code wajib diisi",
@@ -40,10 +31,7 @@ const plantCodeSchema = z
   .min(1, "Plant code wajib diisi")
   .max(5, "Plant code maksimal 5 karakter");
 
-// ============================================
 // BU CODE VALIDATION
-// ============================================
-
 const buCodeSchema = z
   .string({
     required_error: "BU code wajib diisi",
@@ -53,10 +41,7 @@ const buCodeSchema = z
   .min(1, "BU code wajib diisi")
   .max(10, "BU code maksimal 10 karakter");
 
-// ============================================
 // PRODUCT CODE VALIDATION
-// ============================================
-
 const productCodeSchema = z
   .string({
     required_error: "Product code wajib diisi",
@@ -66,10 +51,7 @@ const productCodeSchema = z
   .min(1, "Product code wajib diisi")
   .max(8, "Product code maksimal 8 karakter");
 
-// ============================================
 // AREA CODE VALIDATION
-// ============================================
-
 const areaCodeSchema = z
   .string({
     required_error: "Area code wajib diisi",
@@ -79,10 +61,7 @@ const areaCodeSchema = z
   .min(1, "Area code wajib diisi")
   .max(50, "Area code maksimal 50 karakter");
 
-// ============================================
 // LINE NAME VALIDATION
-// ============================================
-
 const lineNameSchema = z
   .string({
     required_error: "Line name wajib diisi",
@@ -92,10 +71,7 @@ const lineNameSchema = z
   .min(1, "Line name wajib diisi")
   .max(100, "Line name maksimal 100 karakter");
 
-// ============================================
 // LINE CATEGORY VALIDATION
-// ============================================
-
 const lineCategorySchema = z
   .string({
     required_error: "Line category wajib diisi",
@@ -105,12 +81,7 @@ const lineCategorySchema = z
   .min(1, "Line category wajib diisi")
   .max(50, "Line category maksimal 50 karakter");
 
-// ============================================
 // FLAG VALIDATION
-// A = ACTIVE
-// N = NONACTIVE
-// ============================================
-
 const flagSchema = z
   .string({
     required_error: "Flag wajib diisi",
@@ -123,10 +94,7 @@ const flagSchema = z
     "Flag hanya boleh berisi A (Active) atau N (Nonactive)"
   );
 
-// ============================================
 // CREATE LINE
-// ============================================
-
 export const createLineSchema = z
   .object({
     line_code: lineCodeSchema,
@@ -141,10 +109,7 @@ export const createLineSchema = z
   })
   .strict();
 
-// ============================================
 // UPDATE LINE
-// ============================================
-
 export const updateLineSchema = z
   .object({
     new_line_code: lineCodeSchema,
