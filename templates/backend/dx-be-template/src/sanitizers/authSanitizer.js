@@ -1,6 +1,3 @@
-/**
- * Sanitizer for authentication input
- */
 export const sanitizeLoginInput = (data = {}) => {
   return {
     ...data,

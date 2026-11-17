@@ -1,17 +1,7 @@
-
 import { getPool } from "../config/db.js";
 import sql from "../config/db.js";
 
-/**
- * Model Category
- * Bertanggung jawab untuk interaksi langsung dengan SQL Server.
- *
- * Table: dbo.dx_ams_m_category
- */
-
-// ============================================
 // GET ALL CATEGORIES
-// ============================================
 export const findAllCategories = async () => {
   const pool = await getPool();
 
@@ -31,9 +21,7 @@ export const findAllCategories = async () => {
   return result.recordset;
 };
 
-// ============================================
 // GET CATEGORY BY ID
-// ============================================
 export const findCategoryById = async (categoryId) => {
   const pool = await getPool();
 
@@ -56,9 +44,7 @@ export const findCategoryById = async (categoryId) => {
   return result.recordset[0] || null;
 };
 
-// ============================================
 // FIND CATEGORY BY NAME
-// ============================================
 export const findCategoryByName = async (
   categoryName,
   excludeId = null
@@ -85,9 +71,7 @@ export const findCategoryByName = async (
   return result.recordset[0] || null;
 };
 
-// ============================================
 // CREATE CATEGORY
-// ============================================
 export const insertCategory = async ({
   categoryName,
   activeFlag,
@@ -143,7 +127,7 @@ export const insertCategory = async ({
       try {
         await transaction.rollback();
       } catch (rollbackError) {
-        // Abaikan jika transaksi sudah selesai atau dibatalkan.
+
       }
     }
 
@@ -151,9 +135,7 @@ export const insertCategory = async ({
   }
 };
 
-// ============================================
 // UPDATE CATEGORY
-// ============================================
 export const updateCategory = async ({
   categoryId,
   categoryName,
@@ -176,34 +158,6 @@ export const updateCategory = async ({
         update_by = @update_by,
         update_date = GETDATE()
       WHERE category_id = @category_id;
-
-      SELECT @@ROWCOUNT AS affected_rows;
-    `);
-
-  return result.recordset[0].affected_rows > 0;
-};
-
-// ============================================
-// SOFT DELETE CATEGORY
-// ============================================
-export const deactivateCategory = async ({
-  categoryId,
-  username,
-}) => {
-  const pool = await getPool();
-
-  const result = await pool
-    .request()
-    .input("category_id", sql.Int, categoryId)
-    .input("update_by", sql.VarChar(sql.MAX), username)
-    .query(`
-      UPDATE dbo.dx_ams_m_category
-      SET
-        active_flag = 0,
-        update_by = @update_by,
-        update_date = GETDATE()
-      WHERE category_id = @category_id
-        AND active_flag = 1;
 
       SELECT @@ROWCOUNT AS affected_rows;
     `);

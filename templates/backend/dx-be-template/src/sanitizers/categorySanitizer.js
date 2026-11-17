@@ -1,4 +1,3 @@
-
 export const sanitizeCategoryInput = (input) => {
   if (!input || typeof input !== "object" || Array.isArray(input)) {
     return input;

@@ -33,9 +33,9 @@ const startServer = async () => {
     process.on("SIGTERM", () => handleShutdown("SIGTERM"));
     process.on("SIGINT", () => handleShutdown("SIGINT"));
   } catch (error) {
-  console.error("Gagal memulai server:", error);
-  process.exit(1);
-}
+    console.error("Gagal memulai server:", error);
+    process.exit(1);
+  }
 };
 
 startServer();

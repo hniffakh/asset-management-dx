@@ -1,4 +1,3 @@
-
 import { getPool } from "../config/db.js";
 import sql from "../config/db.js";
 

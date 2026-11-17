@@ -1,67 +1,10 @@
-
 import { useEffect, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Pencil, Trash2, Plus, Search, X, Tags} from "lucide-react";
+import {getCategories, createCategory, updateCategory} from "../api/categoryApi.js";
 
-import {
-  getCategories,
-  createCategory,
-  updateCategory,
-  deleteCategory,
-} from "../api/categoryApi.js";
-
-const styles = {
-  page: {
-    display: "flex",
-    minHeight: "100vh",
-    fontFamily: "sans-serif",
-    backgroundColor: "#f3f4f6",
-  },
-  sidebar: {
-    width: "250px",
-    minWidth: "250px",
-    backgroundColor: "#1f2937",
-    color: "white",
-    padding: "20px",
-    display: "flex",
-    flexDirection: "column",
-  },
-  content: {
-    flex: 1,
-    padding: "30px",
-    overflowX: "auto",
-  },
-  card: {
-    backgroundColor: "white",
-    padding: "20px",
-    borderRadius: "8px",
-    boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
-  },
-  input: {
-    padding: "10px",
-    border: "1px solid #d1d5db",
-    borderRadius: "5px",
-    fontSize: "14px",
-  },
-  primaryButton: {
-    padding: "10px 16px",
-    backgroundColor: "#2563eb",
-    color: "white",
-    border: "none",
-    borderRadius: "5px",
-    cursor: "pointer",
-    fontWeight: "bold",
-  },
-  tableCell: {
-    padding: "12px",
-    borderBottom: "1px solid #e5e7eb",
-    color: "#111827",
-    fontSize: "14px",
-    },
-};
+// CATEGORY PAGE
 
 export default function CategoryPage() {
-  const navigate = useNavigate();
-
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -79,9 +22,7 @@ export default function CategoryPage() {
 
   const [saving, setSaving] = useState(false);
 
-  // ============================================
   // FETCH CATEGORIES
-  // ============================================
   const fetchCategories = async () => {
     setLoading(true);
     setError("");
@@ -92,13 +33,15 @@ export default function CategoryPage() {
       if (response.success) {
         setCategories(response.data);
       } else {
-        setError(response.message || "Gagal mengambil data kategori");
+        setError(
+          response.message || "Gagal mengambil data kategori"
+        );
       }
     } catch (err) {
       setError(
         err.response?.data?.message ||
-          err.message ||
-          "Gagal mengambil data kategori"
+        err.message ||
+        "Gagal mengambil data kategori"
       );
     } finally {
       setLoading(false);
@@ -109,12 +52,12 @@ export default function CategoryPage() {
     fetchCategories();
   }, []);
 
-  // ============================================
   // SEARCH & FILTER
-  // ============================================
   const filteredCategories = useMemo(() => {
     return categories.filter((category) => {
-      const matchesSearch = category.category_name
+      const categoryName = (
+        category.category_name || ""
+      )
         .toLowerCase()
         .includes(search.toLowerCase());
 
@@ -122,14 +65,13 @@ export default function CategoryPage() {
         statusFilter === "all" ||
         String(category.active_flag) === statusFilter;
 
-      return matchesSearch && matchesStatus;
+      return categoryName && matchesStatus;
     });
   }, [categories, search, statusFilter]);
 
-  // ============================================
   // OPEN ADD MODAL
-  // ============================================
   const handleAdd = () => {
+    setError("");
     setEditingCategory(null);
 
     setForm({
@@ -140,30 +82,27 @@ export default function CategoryPage() {
     setShowModal(true);
   };
 
-  // ============================================
   // OPEN EDIT MODAL
-  // ============================================
   const handleEdit = (category) => {
+    setError("");
     setEditingCategory(category);
 
     setForm({
-      category_name: category.category_name,
-      active_flag: category.active_flag,
+      category_name: category.category_name || "",
+      active_flag: Number(category.active_flag),
     });
 
     setShowModal(true);
   };
 
-  // ============================================
   // SAVE CATEGORY
-  // ============================================
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const categoryName = form.category_name.trim();
 
     if (!categoryName) {
-      alert("Nama kategori wajib diisi");
+      setError("Nama kategori wajib diisi");
       return;
     }
 
@@ -186,435 +125,257 @@ export default function CategoryPage() {
       }
 
       setShowModal(false);
+      setEditingCategory(null);
 
       await fetchCategories();
     } catch (err) {
       setError(
         err.response?.data?.message ||
-          err.message ||
-          "Gagal menyimpan kategori"
+        err.message ||
+        "Gagal menyimpan kategori"
       );
     } finally {
       setSaving(false);
     }
   };
 
-  // ============================================
-  // DELETE CATEGORY
-  // ============================================
-  const handleDelete = async (category) => {
-    const confirmed = window.confirm(
-      `Nonaktifkan kategori "${category.category_name}"?`
-    );
+  // CLOSE MODAL
+  const handleCloseModal = () => {
+    if (saving) return;
 
-    if (!confirmed) return;
-
+    setShowModal(false);
+    setEditingCategory(null);
     setError("");
-
-    try {
-      await deleteCategory(category.category_id);
-
-      await fetchCategories();
-    } catch (err) {
-      setError(
-        err.response?.data?.message ||
-          err.message ||
-          "Gagal menonaktifkan kategori"
-      );
-    }
   };
 
-  // ============================================
-  // LOGOUT
-  // ============================================
-  const handleLogout = () => {
-    sessionStorage.removeItem("token");
-    sessionStorage.removeItem("isLoggedIn");
-
-    navigate("/login", { replace: true });
-  };
-
+  // RENDER
   return (
-    <div style={styles.page}>
-      {/* SIDEBAR */}
-      <aside style={styles.sidebar}>
-        <h2
-          style={{
-            marginBottom: "30px",
-            fontSize: "20px",
-            borderBottom: "1px solid #374151",
-            paddingBottom: "10px",
-          }}
-        >
-          DX AMS
-        </h2>
-
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "10px",
-          }}
-        >
-          <div
-            onClick={() => navigate("/dashboard")}
-            style={{
-              padding: "10px",
-              borderRadius: "5px",
-              cursor: "pointer",
-            }}
-          >
-            Dashboard
-          </div>
-
-          <div
-            style={{
-              padding: "10px",
-              backgroundColor: "#374151",
-              borderRadius: "5px",
-              cursor: "pointer",
-            }}
-          >
-            Master Data
-          </div>
-
-          <div
-            style={{
-              marginLeft: "15px",
-              display: "flex",
-              flexDirection: "column",
-              gap: "5px",
-              fontSize: "14px",
-              color: "#9ca3af",
-            }}
-          >
-            <div
-              style={{
-                padding: "8px",
-                backgroundColor: "#374151",
-                color: "white",
-                borderRadius: "5px",
-              }}
-            >
-              Category
-            </div>
-
-            {["Device", "Spec", "Harga", "Opoq", "Location"].map(
-              (menu) => (
-                <div
-                  key={menu}
-                  style={{
-                    padding: "8px",
-                    cursor: "pointer",
-                  }}
-                >
-                  {menu}
-                </div>
-              )
-            )}
-          </div>
-        </div>
-
-        <div style={{ marginTop: "auto" }}>
-          <button
-            onClick={handleLogout}
-            style={{
-              width: "100%",
-              padding: "12px",
-              backgroundColor: "#dc2626",
-              color: "white",
-              border: "none",
-              borderRadius: "5px",
-              cursor: "pointer",
-              fontWeight: "bold",
-            }}
-          >
-            Logout
-          </button>
-        </div>
-      </aside>
-
-      {/* MAIN CONTENT */}
-      <main style={styles.content}>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            marginBottom: "25px",
-            flexWrap: "wrap",
-            gap: "15px",
-          }}
-        >
-          <div>
-            <h1
-              style={{
-                color: "#111827",
-                margin: 0,
-              }}
-            >
-              Master Category
-            </h1>
-
-            <p style={{ color: "#6b7280" }}>
-              Manage device categories
-            </p>
-          </div>
-
-          <button
-            onClick={handleAdd}
-            style={styles.primaryButton}
-          >
-            + Add Category
-          </button>
-        </div>
-
+    <div className="page-wrapper category-page">
+      <div className="page-container">
         {/* ERROR */}
-        {error && (
-          <div
-            style={{
-              backgroundColor: "#fee2e2",
-              color: "#991b1b",
-              padding: "12px",
-              borderRadius: "5px",
-              marginBottom: "20px",
-            }}
-          >
+        {error && !showModal && (
+          <div className="alert alert-error category-alert">
             {error}
           </div>
         )}
 
-        {/* TABLE */}
-        <div style={styles.card}>
-          {/* SEARCH & FILTER */}
-          <div
-            style={{
-              display: "flex",
-              gap: "12px",
-              marginBottom: "20px",
-              flexWrap: "wrap",
-            }}
-          >
-            <input
-              type="text"
-              placeholder="Search category..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              style={{
-                ...styles.input,
-                flex: 1,
-                minWidth: "200px",
-              }}
-            />
+        {/* CATEGORY TABLE CARD */}
+        <section className="card">
+          {/* CARD HEADER */}
+          <div className="card-header">
+            <div>
+              <h2 className="card-title">
+                Category List
+              </h2>
 
-            <select
-              value={statusFilter}
-              onChange={(e) =>
-                setStatusFilter(e.target.value)
-              }
-              style={styles.input}
-            >
-              <option value="all">All Status</option>
-              <option value="1">Active</option>
-              <option value="0">Inactive</option>
-            </select>
+              <p className="card-description">
+                Manage asset categories.
+              </p>
+            </div>
+
+            <div className="category-total">
+              <Tags size={16} />
+              <span>
+                {filteredCategories.length} Categories
+              </span>
+            </div>
           </div>
 
-          {/* CATEGORY TABLE */}
-            <div style={{ overflowX: "auto" }}>
-            <table
-                style={{
-                width: "100%",
-                borderCollapse: "collapse",
-                textAlign: "left",
-                }}
-            >
-                <thead>
-                <tr
-                    style={{
-                    backgroundColor: "#f3f4f6",
-                    color: "#111827",
-                    }}
-                >
-                    <th style={styles.tableCell}>ID</th>
-                    <th style={styles.tableCell}>Category Name</th>
-                    <th style={styles.tableCell}>Status</th>
-                    <th style={styles.tableCell}>Action</th>
-                </tr>
-                </thead>
+          {/* SEARCH & FILTER */}
+          <div className="category-toolbar">
+            <div className="category-search">
+              <Search size={18} className="category-search-icon" />
 
-                <tbody>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Search category..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+            </div>
+
+            <div className="category-toolbar-actions">
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={handleAdd}
+              >
+                <Plus size={18} />
+                Add Category
+              </button>
+
+              <select
+                className="form-control category-status-filter"
+                value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value)}
+              >
+                <option value="all">All Status</option>
+                <option value="1">Active</option>
+                <option value="0">Inactive</option>
+              </select>
+            </div>
+          </div>
+
+          {/* TABLE */}
+          <div className="table-wrapper">
+            <table className="table">
+              <thead>
+                <tr>
+                  <th className="category-id-column">
+                    ID
+                  </th>
+
+                  <th>Category Name</th>
+
+                  <th>Status</th>
+
+                  <th className="category-action-column">
+                    Action
+                  </th>
+                </tr>
+              </thead>
+
+              <tbody>
                 {loading ? (
-                    <tr>
+                  <tr>
                     <td
-                        colSpan={4}
-                        style={{
-                        ...styles.tableCell,
-                        textAlign: "center",
-                        color: "#111827",
-                        }}
+                      colSpan={4}
+                      className="category-table-message"
                     >
-                        Loading categories...
+                      Loading categories...
                     </td>
-                    </tr>
+                  </tr>
                 ) : filteredCategories.length === 0 ? (
-                    <tr>
+                  <tr>
                     <td
-                        colSpan={4}
-                        style={{
-                        ...styles.tableCell,
-                        textAlign: "center",
-                        color: "#111827",
-                        }}
+                      colSpan={4}
+                      className="category-table-message"
                     >
-                        No category data found
+                      <div className="empty-state">
+                        <Tags size={32} />
+
+                        <h3>
+                          No category data found
+                        </h3>
+                      </div>
                     </td>
-                    </tr>
+                  </tr>
                 ) : (
-                    filteredCategories.map((category) => (
-                    <tr key={category.category_id}>
+                  filteredCategories.map((category) => {
+                    const isActive =
+                      Number(category.active_flag) === 1;
+
+                    return (
+                      <tr key={category.category_id}>
                         {/* ID */}
-                        <td style={styles.tableCell}>
-                        {category.category_id}
+                        <td>
+                          <span className="category-id">
+                            {category.category_id}
+                          </span>
                         </td>
 
                         {/* CATEGORY NAME */}
-                        <td style={styles.tableCell}>
-                        {category.category_name}
+                        <td>
+                          <span className="category-name">
+                            {category.category_name}
+                          </span>
                         </td>
 
                         {/* STATUS */}
-                        <td style={styles.tableCell}>
-                        <span
-                            style={{
-                            padding: "5px 10px",
-                            borderRadius: "5px",
-                            fontSize: "12px",
-                            fontWeight: "bold",
-                            color:
-                                category.active_flag === 1
-                                ? "#166534"
-                                : "#991b1b",
-                            backgroundColor:
-                                category.active_flag === 1
-                                ? "#dcfce7"
-                                : "#fee2e2",
-                            }}
-                        >
-                            {category.active_flag === 1
-                            ? "Active"
-                            : "Inactive"}
-                        </span>
+                        <td>
+                          <span
+                            className={`category-status-badge ${isActive
+                                ? "category-status-active"
+                                : "category-status-inactive"
+                              }`}
+                          >
+                            {isActive ? "Active" : "Inactive"}
+                          </span>
                         </td>
 
                         {/* ACTION */}
-                        <td style={styles.tableCell}>
-                        <div
-                            style={{
-                            display: "flex",
-                            gap: "8px",
-                            }}
-                        >
+                        <td>
+                          <div className="table-actions">
                             <button
-                            onClick={() => handleEdit(category)}
-                            style={{
-                                padding: "6px 10px",
-                                backgroundColor: "#2563eb",
-                                color: "white",
-                                border: "none",
-                                borderRadius: "4px",
-                                cursor: "pointer",
-                            }}
+                              type="button"
+                              className="btn-icon category-action-edit"
+                              onClick={() =>
+                                handleEdit(category)
+                              }
+                              title="Edit category"
+                              aria-label="Edit category"
                             >
-                            Edit
+                              <Pencil size={16} />
                             </button>
-
-                            <button
-                            onClick={() => handleDelete(category)}
-                            disabled={category.active_flag === 0}
-                            style={{
-                                padding: "6px 10px",
-                                backgroundColor:
-                                category.active_flag === 0
-                                    ? "#9ca3af"
-                                    : "#dc2626",
-                                color: "white",
-                                border: "none",
-                                borderRadius: "4px",
-                                cursor:
-                                category.active_flag === 0
-                                    ? "not-allowed"
-                                    : "pointer",
-                            }}
-                            >
-                            Delete
-                            </button>
-                        </div>
+                          </div>
                         </td>
-                    </tr>
-                    ))
+                      </tr>
+                    );
+                  })
                 )}
-                </tbody>
+              </tbody>
             </table>
+          </div>
+
+          {/* TABLE FOOTER */}
+          <div className="category-table-footer">
+            <span>
+              Showing {filteredCategories.length} of{" "}
+              {categories.length} categories
+            </span>
+          </div>
+        </section>
+      </div>
+
+      {/* ADD / EDIT MODAL */}
+      {showModal && (
+        <div
+          className="modal-overlay"
+          onClick={handleCloseModal}
+        >
+          <div
+            className="modal category-modal"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* MODAL HEADER */}
+            <div className="modal-header">
+              <div>
+                <h2 className="modal-title">
+                  {editingCategory
+                    ? "Edit Category"
+                    : "Add Category"}
+                </h2>
+
+                <p className="category-modal-description">
+                  {editingCategory
+                    ? "Update asset category information."
+                    : "Add a new asset category."}
+                </p>
+              </div>
+
+              <button
+                type="button"
+                className="btn-icon"
+                onClick={handleCloseModal}
+                disabled={saving}
+                aria-label="Close modal"
+              >
+                <X size={18} />
+              </button>
             </div>
 
-          <div
-            style={{
-              marginTop: "15px",
-              color: "#6b7280",
-              fontSize: "13px",
-            }}
-          >
-            Total: {filteredCategories.length} categories
-          </div>
-        </div>
+            {/* MODAL BODY */}
+            <form onSubmit={handleSubmit}>
+              <div className="modal-body">
+                {error && (
+                  <div className="alert alert-error category-modal-alert">
+                    {error}
+                  </div>
+                )}
 
-        {/* ADD / EDIT MODAL */}
-        {showModal && (
-          <div
-            onClick={() => setShowModal(false)}
-            style={{
-              position: "fixed",
-              inset: 0,
-              backgroundColor: "rgba(0,0,0,0.5)",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              padding: "20px",
-              zIndex: 1000,
-            }}
-          >
-            <div
-              onClick={(e) => e.stopPropagation()}
-              style={{
-                backgroundColor: "white",
-                width: "100%",
-                maxWidth: "450px",
-                padding: "25px",
-                borderRadius: "10px",
-                boxShadow: "0 10px 25px rgba(0,0,0,0.2)",
-              }}
-            >
-              <h2
-                style={{
-                  marginTop: 0,
-                  color: "#111827",
-                }}
-              >
-                {editingCategory
-                  ? "Edit Category"
-                  : "Add Category"}
-              </h2>
-
-              <form onSubmit={handleSubmit}>
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "8px",
-                    marginBottom: "18px",
-                  }}
-                >
+                {/* CATEGORY NAME */}
+                <div className="form-group">
                   <label htmlFor="category_name">
                     Category Name
                   </label>
@@ -622,6 +383,7 @@ export default function CategoryPage() {
                   <input
                     id="category_name"
                     type="text"
+                    className="form-control"
                     value={form.category_name}
                     onChange={(e) =>
                       setForm({
@@ -632,85 +394,61 @@ export default function CategoryPage() {
                     placeholder="Enter category name"
                     maxLength={100}
                     required
-                    style={{
-                      ...styles.input,
-                      width: "100%",
-                      boxSizing: "border-box",
-                    }}
                   />
                 </div>
 
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "8px",
-                    marginBottom: "25px",
-                  }}
-                >
+                {/* STATUS */}
+                <div className="form-group">
                   <label htmlFor="active_flag">
                     Status
                   </label>
 
                   <select
                     id="active_flag"
+                    className="form-control"
                     value={form.active_flag}
                     onChange={(e) =>
                       setForm({
                         ...form,
-                        active_flag: Number(e.target.value),
+                        active_flag: Number(
+                          e.target.value
+                        ),
                       })
                     }
-                    style={{
-                      ...styles.input,
-                      width: "100%",
-                      boxSizing: "border-box",
-                    }}
                   >
                     <option value={1}>Active</option>
                     <option value={0}>Inactive</option>
                   </select>
                 </div>
+              </div>
 
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "flex-end",
-                    gap: "10px",
-                  }}
+              {/* MODAL FOOTER */}
+              <div className="modal-footer">
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  onClick={handleCloseModal}
+                  disabled={saving}
                 >
-                  <button
-                    type="button"
-                    onClick={() => setShowModal(false)}
-                    style={{
-                      padding: "10px 16px",
-                      backgroundColor: "#e5e7eb",
-                      color: "#374151",
-                      border: "none",
-                      borderRadius: "5px",
-                      cursor: "pointer",
-                    }}
-                  >
-                    Cancel
-                  </button>
+                  Cancel
+                </button>
 
-                  <button
-                    type="submit"
-                    disabled={saving}
-                    style={styles.primaryButton}
-                  >
-                    {saving
-                      ? "Saving..."
-                      : editingCategory
-                      ? "Update"
-                      : "Save"}
-                  </button>
-                </div>
-              </form>
-            </div>
+                <button
+                  type="submit"
+                  className="btn btn-primary"
+                  disabled={saving}
+                >
+                  {saving
+                    ? "Saving..."
+                    : editingCategory
+                      ? "Update Category"
+                      : "Save Category"}
+                </button>
+              </div>
+            </form>
           </div>
-        )}
-      </main>
+        </div>
+      )}
     </div>
   );
 }

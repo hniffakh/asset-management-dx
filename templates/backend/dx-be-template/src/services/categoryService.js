@@ -1,20 +1,9 @@
-
-import {
-  findAllCategories,
-  findCategoryById,
-  findCategoryByName,
-  insertCategory,
-  updateCategory,
-  deactivateCategory,
-} from "../models/categoryModel.js";
-
+import { findAllCategories, findCategoryById, findCategoryByName, insertCategory, updateCategory } from "../models/categoryModel.js";
 import { ValidationError } from "../errors/ValidationError.js";
 import { NotFoundError } from "../errors/NotFoundError.js";
 import { AppError } from "../errors/AppError.js";
 
-// ============================================
-// HELPER: VALIDATE CATEGORY ID
-// ============================================
+// VALIDATE CATEGORY ID
 const validateCategoryId = (categoryId) => {
   const id = Number(categoryId);
 
@@ -25,9 +14,7 @@ const validateCategoryId = (categoryId) => {
   return id;
 };
 
-// ============================================
-// HELPER: VALIDATE CATEGORY NAME
-// ============================================
+// VALIDATE CATEGORY NAME
 const validateCategoryName = (categoryName) => {
   if (
     typeof categoryName !== "string" ||
@@ -39,9 +26,7 @@ const validateCategoryName = (categoryName) => {
   return categoryName.trim();
 };
 
-// ============================================
-// HELPER: VALIDATE ACTIVE FLAG
-// ============================================
+// VALIDATE ACTIVE FLAG
 const validateActiveFlag = (activeFlag) => {
   if (
     activeFlag !== 0 &&
@@ -55,16 +40,12 @@ const validateActiveFlag = (activeFlag) => {
   return activeFlag;
 };
 
-// ============================================
 // GET ALL CATEGORIES
-// ============================================
 export const getAllCategoriesService = async () => {
   return await findAllCategories();
 };
 
-// ============================================
 // GET CATEGORY BY ID
-// ============================================
 export const getCategoryByIdService = async (categoryId) => {
   const id = validateCategoryId(categoryId);
 
@@ -77,9 +58,7 @@ export const getCategoryByIdService = async (categoryId) => {
   return category;
 };
 
-// ============================================
 // CREATE CATEGORY
-// ============================================
 export const createCategoryService = async ({
   categoryName,
   activeFlag = 1,
@@ -111,9 +90,7 @@ export const createCategoryService = async ({
   return category;
 };
 
-// ============================================
 // UPDATE CATEGORY
-// ============================================
 export const updateCategoryService = async ({
   categoryId,
   categoryName,
@@ -157,43 +134,4 @@ export const updateCategoryService = async ({
   }
 
   return await findCategoryById(id);
-};
-
-// ============================================
-// DELETE CATEGORY (SOFT DELETE)
-// ============================================
-export const deleteCategoryService = async ({
-  categoryId,
-  username,
-}) => {
-  const id = validateCategoryId(categoryId);
-
-  if (!username) {
-    throw new AppError("Informasi user tidak ditemukan", 401);
-  }
-
-  const existingCategory = await findCategoryById(id);
-
-  if (!existingCategory) {
-    throw new NotFoundError("Kategori tidak ditemukan");
-  }
-
-  if (existingCategory.active_flag === 0) {
-    throw new AppError("Kategori sudah berstatus Inactive", 409);
-  }
-
-  const deleted = await deactivateCategory({
-    categoryId: id,
-    username,
-  });
-
-  if (!deleted) {
-    throw new AppError("Kategori gagal dinonaktifkan", 409);
-  }
-
-  return {
-    category_id: id,
-    category_name: existingCategory.category_name,
-    active_flag: 0,
-  };
 };

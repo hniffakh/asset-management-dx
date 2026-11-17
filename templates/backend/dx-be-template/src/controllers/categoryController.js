@@ -1,10 +1,8 @@
-
 import {
   getAllCategoriesService,
   getCategoryByIdService,
   createCategoryService,
   updateCategoryService,
-  deleteCategoryService,
 } from "../services/categoryService.js";
 
 import { HTTP_STATUS } from "../constants/httpStatusCodes.js";
@@ -93,24 +91,3 @@ export const updateCategory = async (req, res, next) => {
   }
 };
 
-// ============================================
-// DELETE CATEGORY (SOFT DELETE)
-// ============================================
-export const deleteCategory = async (req, res, next) => {
-  try {
-    const { id } = req.params;
-
-    const result = await deleteCategoryService({
-      categoryId: id,
-      username: req.user.username,
-    });
-
-    return res.status(HTTP_STATUS.OK).json({
-      success: true,
-      message: "Kategori berhasil dinonaktifkan",
-      data: result,
-    });
-  } catch (error) {
-    next(error);
-  }
-};
